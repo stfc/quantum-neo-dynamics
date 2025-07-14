@@ -1,10 +1,4 @@
-# Project Title
-
 Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors.
-
-## Description
-
-
 
 ## Getting Started
 
@@ -21,7 +15,6 @@ Approximate quantum circuit compilation for proton-transfer kinetics on quantum 
 ### Executing programme
 
 * To run the main programme, make sure you have Python installed and the required dependencies set up (seethe Installation section). Then, to perform statevector simulations, execute qneo.py as
-* 
 ```
 python qneo.py -m <method> -s <system> -a <approximation> -s <state>
 ```
@@ -39,12 +32,10 @@ python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes>
 
 ## Authors
 
-Contributors names and contact info
-
-. [@dilhanm](https://github.com/DilhanM)
-. [@edoaltamura](https://github.com/edoaltamura)
-. [@GeorgePennington](https://github.com/GeorgePennington)
-. [@bjader](https://github.com/bjader)
+- [@dilhanm](https://github.com/DilhanM)
+- [@edoaltamura](https://github.com/edoaltamura)
+- [@GeorgePennington](https://github.com/GeorgePennington)
+- [@bjader](https://github.com/bjader)
 
 ## Version History
 
