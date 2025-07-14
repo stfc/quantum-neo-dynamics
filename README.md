@@ -43,6 +43,7 @@ python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes>
 
 - [@dilhanm](https://github.com/DilhanM)
 - [@edoaltamura](https://github.com/edoaltamura)
+- [@arseny-qc](@https://github.com/arseny-qc)
 - [@GeorgePennington](https://github.com/GeorgePennington)
 - [@bjader](https://github.com/bjader)
 
