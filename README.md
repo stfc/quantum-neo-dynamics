@@ -1,11 +1,4 @@
-Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors.
-
-## Getting Started
-
-### Dependencies
-
-* 
-* 
+A repository to accompany the paper "Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors". Here we provide a set of circuits designed to model dynamics of proton transfer in malonaldehyde using the [Nuclear Electronic Orbital theory](https://doi.org/10.1063/1.1494980). We also provide the results generated from our simulations that are described in the paper.
 
 ### 🛠️ Installation
 
@@ -45,12 +38,6 @@ python qneo.py -m <method> -s <system> -a <approximation> -s <state>
 ```
 python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes> -S <seconds>
 ```
-## Help
-
-
-```
-
-```
 
 ## Authors
 
@@ -66,6 +53,6 @@ python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes>
 
 ## License
 
-
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Acknowledgments
