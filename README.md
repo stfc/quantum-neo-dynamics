@@ -23,49 +23,23 @@ This repository provides:
 ### 📁 Directory structure
 ```
 .
+├── data
+│   ├── backends
+│   │   ├── ibm_fez_*.properties.json
+│   ├── circ
+│   │   ├── aqc
+│   │   │   ├── aqc-*.qpy
+│   │   ├── product
+│   │   │   ├── product-*.qpy
+│   │   └── vqe
+│   │       ├── vqe-*.qpy
+│   ├── ham
+│   │   ├── hamiltonian_*.json
+│   └── targets
+│       ├── ibm_fez_*.target.pkl
 ├── figures
 │   ├── fig*.py
 │   └── fig*.pdf
-├── data
-│   ├── backends
-│   │   ├── ibm_fez_2024-09-30T21:18:12+00:00.properties.json
-│   │   ├── ibm_fez_2024-11-10T10:40:31+00:00.properties.json
-│   │   ├── ibm_fez_2025-02-01T15:38:12+00:00.properties.json
-│   │   └── ibm_fez_2025-09-30T21:18:12+00:00.properties.json
-│   ├── circ
-│   │   ├── aqc
-│   │   │   ├── aqc-high-030.qpy
-│   │   │   ├── aqc-high-300.qpy
-│   │   │   ├── aqc-low-003.qpy
-│   │   │   ├── aqc-low-012.qpy
-│   │   │   ├── aqc-low-021.qpy
-│   │   │   ├── aqc-low-030.qpy
-│   │   │   ├── aqc-low-120.qpy
-│   │   │   ├── aqc-low-210.qpy
-│   │   │   └── aqc-low-300.qpy
-│   │   ├── product
-│   │   │   ├── product-030.qpy
-│   │   │   └── product-300.qpy
-│   │   └── vqe
-│   │       ├── vqe-deep-003.qpy
-│   │       ├── vqe-deep-030.qpy
-│   │       ├── vqe-deep-300.qpy
-│   │       ├── vqe-shallow-003.qpy
-│   │       ├── vqe-shallow-030.qpy
-│   │       └── vqe-shallow-300.qpy
-│   ├── ham
-│   │   ├── hamiltonian_003.json
-│   │   ├── hamiltonian_012.json
-│   │   ├── hamiltonian_021.json
-│   │   ├── hamiltonian_030.json
-│   │   ├── hamiltonian_120.json
-│   │   ├── hamiltonian_210.json
-│   │   └── hamiltonian_300.json
-│   └── targets
-│       ├── ibm_fez_2024-09-30T21:18:12+00:00.target.pkl
-│       ├── ibm_fez_2024-11-10T10:40:31+00:00.target.pkl
-│       ├── ibm_fez_2025-02-01T15:38:12+00:00.target.pkl
-│       └── ibm_fez_2025-09-30T21:18:12+00:00.target.pkl
 ├── qneo.py
 ├── quantum_neo_dynamics
 │   ├── decoder.py
@@ -153,8 +127,4 @@ python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes>
 ## 🕒 Version History
 
 * v0.1 - Initial Release
-
-## License
-
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
