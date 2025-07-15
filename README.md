@@ -110,14 +110,14 @@ To set up the project locally, follow these steps:
 
 ## Statevector simulations
 
-* To run the main programme, make sure you have Python installed and the required dependencies set up (seethe Installation section). Then, to perform statevector simulations, execute `qneo.py` as
+* To run the main programme, make sure you have Python installed and the required dependencies set up (see the Installation section). Then, to perform statevector simulations, execute `qneo.py` as
 ```
 python qneo.py -m <method> -a <approximation> -s <state>
 ```
 
 ## Noisy simulations
 
-* To perform simulations with device nosie models, execute `qneo.py` with the arguments
+* To perform simulations with device noise models, execute `qneo.py` with the arguments
 ```
 python qneo.py -m <method>  -a <approximation> -s <state> -b 1 -t <target> -p <props> -nsf <noisescalefactor> -ns <numshots>
 ```
@@ -132,6 +132,23 @@ python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes>
 - [@arseny-qc](https://github.com/arseny-qc)
 - [@GeorgePennington](https://github.com/GeorgePennington)
 - [@bjader](https://github.com/bjader)
+
+> [!NOTE]
+> If you use this repository or its data in your work, we kindly request you to cite our paper with the following `bibtex` handle ([CITATION.bib](./CITATION.bib)):
+> ```bibtex
+> @ARTICLE{2025arXiv250708996K,  
+>  author = {{Kovyrshin}, Arseny and {Manawadu}, Dilhan and {Altamura}, Edoardo and {Pennington}, George and {Jaderberg}, Benjamin and {Brandhofer}, Sebastian and {Nyk{\"a}nen}, Anton and {Miller}, Aaron and {Talarico}, Walter and {Knecht}, Stefan and {Pavo{\v{s}}evi{\'c}}, Fabijan and {Baiardi}, Alberto and {Tacchino}, Francesco and {Tavernelli}, Ivano and {Mensa}, Stefano and {Crain}, Jason and {Tornberg}, Lars and {Broo}, Anders},  
+>  title = "{Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors}",  
+>  journal = {arXiv e-prints},  
+>  year = 2025,  
+>  month = jul,  
+>  eprint = {2507.08996},  
+>  archivePrefix = {arXiv},  
+>  primaryClass = {quant-ph},
+> adsurl = {https://ui.adsabs.harvard.edu/abs/2025arXiv250708996K},
+> adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+> }
+> ```
 
 ## 🕒 Version History
 
