@@ -25,18 +25,18 @@ This repository provides:
 .
 ├── data
 │   ├── backends
-│   │   ├── ibm_fez_*.properties.json
+│   │   └── ibm_fez_*.properties.json
 │   ├── circ
 │   │   ├── aqc
-│   │   │   ├── aqc-*.qpy
+│   │   │   └── aqc-*.qpy
 │   │   ├── product
-│   │   │   ├── product-*.qpy
+│   │   │   └── product-*.qpy
 │   │   └── vqe
-│   │       ├── vqe-*.qpy
+│   │       └── vqe-*.qpy
 │   ├── ham
-│   │   ├── hamiltonian_*.json
+│   │   └── hamiltonian_*.json
 │   └── targets
-│       ├── ibm_fez_*.target.pkl
+│       └── ibm_fez_*.target.pkl
 ├── figures
 │   ├── fig*.py
 │   └── fig*.pdf
