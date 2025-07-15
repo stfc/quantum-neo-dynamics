@@ -5,7 +5,7 @@
 ![Python Language](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fstfc%2Fquantum-neo-dynamics&label=Repository%20Visits&countColor=%230c7ebe&style=flat&labelStyle=none)
 ![GitHub License](https://img.shields.io/github/license/stfc/quantum-neo-dynamics)
-
+[![DOI](https://zenodo.org/badge/1018006629.svg)](https://doi.org/10.5281/zenodo.15924624)
 
 ### 🧪 Quantum NEO Dynamics
 
