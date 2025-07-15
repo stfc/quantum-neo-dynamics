@@ -1,14 +1,31 @@
+![Density-map](figures/fig1.png)
+
+[![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2507.08996)
+![GitHub Release](https://img.shields.io/github/v/release/stfc/quantum-neo-dynamics)
+![Python Language](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fstfc%2Fquantum-neo-dynamics&label=Repository%20Visits&countColor=%230c7ebe&style=flat&labelStyle=none)
+![GitHub License](https://img.shields.io/github/license/stfc/quantum-neo-dynamics)
+
+
 ### 🧪 Quantum NEO Dynamics
 
-A repository to accompany the paper [Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors](https://doi.org/10.48550/arXiv.2507.08996). This repository provides:
+A repository to accompany the paper [_Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors_](https://doi.org/10.48550/arXiv.2507.08996).
+
+**Authors:** Arseny Kovyrshin, Dilhan Manawadu, Edoardo Altamura, George Pennington, Benjamin Jaderberg, Sebastian Brandhofer, Anton Nykänen, Aaron Miller, Walter Talarico, Stefan Knecht, Fabijan Pavošević, Alberto Baiardi, Francesco Tacchino, Ivano Tavernelli, Stefano Mensa, Jason Crain, Lars Tornberg, Anders Broo
+
+
+This repository provides:
 
 * Quantum circuits and Hamiltonians modelling proton transfer dynamics as described in the paper.
-* Sample python scripts to perform simulations.
+* Sample Python scripts to perform simulations.
 * Results and data supporting the findings in the paper.
 
 ### 📁 Directory structure
 ```
 .
+├── figures
+│   ├── fig*.py
+│   └── fig*.pdf
 ├── data
 │   ├── backends
 │   │   ├── ibm_fez_2024-09-30T21:18:12+00:00.properties.json
