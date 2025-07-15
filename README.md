@@ -1,6 +1,6 @@
 ![Density-map](figures/fig1.png)
 
-[![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2507.08996)
+[![arXiv](https://img.shields.io/badge/arXiv-2507.08996-b31b1b.svg)](https://arxiv.org/abs/2507.08996)
 ![GitHub Release](https://img.shields.io/github/v/release/stfc/quantum-neo-dynamics)
 ![Python Language](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fstfc%2Fquantum-neo-dynamics&label=Repository%20Visits&countColor=%230c7ebe&style=flat&labelStyle=none)
