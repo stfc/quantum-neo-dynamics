@@ -17,3 +17,5 @@ BACKENDS_DIR = DATA_DIR / "backends"
 LOG_DIR = ROOT_DIR / "logs"
 
 RESULTS_DIR = ROOT_DIR / "results"
+
+HARDWARE_EXPERIMENTS_JOBDATA = RESULTS_DIR / "hardware_experiments_jobdata.csv"
