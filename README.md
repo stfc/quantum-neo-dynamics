@@ -41,6 +41,7 @@ This repository provides:
 │   ├── fig*.py
 │   └── fig*.pdf
 ├── qneo.py
+├── qpu_submit.py
 ├── quantum_neo_dynamics
 │   ├── decoder.py
 │   └── paths.py
@@ -99,6 +100,16 @@ python qneo.py -m <method>  -a <approximation> -s <state> -b 1 -t <target> -p <p
 ```
 python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes> -S <seconds>
 ```
+
+## Hardware experiments
+
+* To perform experiments on IBM quantum processors, run the script `qpu_submit.py` by running
+```
+python qpu_submit.py
+``` 
+
+* The system parameters are specified in the source code. It might be necessary to [set up an IBM Cloud account](https://quantum.cloud.ibm.com/docs/en/guides/cloud-setup).
+
 ## 👥 Authors
 
 - [@dilhanm](https://github.com/DilhanM)
