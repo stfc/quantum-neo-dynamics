@@ -101,9 +101,9 @@ python qneo.py -m <method>  -a <approximation> -s <state> -b 1 -t <target> -p <p
 python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes> -S <seconds>
 ```
 
-## Hardware experiments
+## [Experimental] Hardware experiments
 
-* To perform experiments on IBM quantum processors, run the script `qpu_submit.py` by running
+* To perform experiments on IBM quantum processors, run the script `qpu_submit.py` by executing
 ```
 python qpu_submit.py
 ``` 
