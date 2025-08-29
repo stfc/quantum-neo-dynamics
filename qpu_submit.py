@@ -12,7 +12,7 @@ from qiskit_ibm_runtime import QiskitRuntimeService, Batch, EstimatorOptions, Es
 from quantum_neo_dynamics.paths import HARDWARE_EXPERIMENTS_JOBDATA
 
 
-def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag=None, shots=100_000, noise_factors=None):
+def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag=None, shots=100_000, noise_factors=None, mode="batch"):
     provider = QiskitRuntimeService()
     backend = provider.backend(backend_str)
     props = backend.properties()
@@ -40,8 +40,46 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
         isa_observables = [observable.apply_layout(layout) for observable in observables]
         obs.append(isa_observables)
 
-    with Batch(backend=backend) as batch:
+    if mode == "batch":
+        with Batch(backend=backend) as batch:
 
+            options = EstimatorOptions(default_shots=shots, resilience_level=0)
+            # PT
+            options.twirling.enable_gates = True
+            options.twirling.num_randomizations = "auto"
+            options.twirling.shots_per_randomization = "auto"
+            if shots >= 100_000:
+                # otherwise we have 100_000/64 many randomizations which seems excessive
+                options.twirling.shots_per_randomization = 500
+
+            # TREX
+            options.resilience.measure_mitigation = True
+
+            # ZNE
+            options.resilience.zne_mitigation = True
+            if noise_factors is None:
+                options.resilience.zne.noise_factors = list(np.linspace(1.0, 4, 10))
+            else:
+                options.resilience.zne.noise_factors = noise_factors
+            options.resilience.zne.extrapolator = ("exponential", "linear", "polynomial_degree_2")
+
+            # QOL
+            # Large payload, maybe don't set
+            # options.environment.log_level = "DEBUG"
+            estimator = EstimatorV2(mode=batch, options=options)
+
+            for i, isa_qc in enumerate(isa_qcs):
+                if tag is None:
+                    estimator.options.environment.job_tags = ["Proton_{}".format(i)]
+                else:
+                    estimator.options.environment.job_tags = tag
+                job = estimator.run([(isa_qc, obs[i])])
+
+                # Print correspondence between job ID and circuit name
+                job_id = job.job_id()
+                print("job for isa_qc=", i, "with id=", job_id)
+                jobs.append((i,job_id))
+    elif mode == "job":
         options = EstimatorOptions(default_shots=shots, resilience_level=0)
         # PT
         options.twirling.enable_gates = True
@@ -62,30 +100,28 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
             options.resilience.zne.noise_factors = noise_factors
         options.resilience.zne.extrapolator = ("exponential", "linear", "polynomial_degree_2")
 
-        # QOL
-        # Large payload, maybe don't set
-        # options.environment.log_level = "DEBUG"
-        estimator = EstimatorV2(mode=batch, options=options)
+        estimator = EstimatorV2(mode=backend, options=options)
 
         for i, isa_qc in enumerate(isa_qcs):
             if tag is None:
                 estimator.options.environment.job_tags = ["Proton_{}".format(i)]
             else:
                 estimator.options.environment.job_tags = tag
-
             job = estimator.run([(isa_qc, obs[i])])
 
             # Print correspondence between job ID and circuit name
             job_id = job.job_id()
             print("job for isa_qc=", i, "with id=", job_id)
             jobs.append((i,job_id))
+
+
     return jobs
 
 
 
 
-shots = 10_000
-noise_factors = list(np.linspace(1.0 , 3.0, 7))
+shots = 2_000
+noise_factors = list(np.linspace(1.0 , float(7/3), 5))
 backend_str = "ibm_pittsburgh"
 
 from quantum_neo_dynamics.decoder import load_circuits, load_hamiltonians
@@ -94,15 +130,16 @@ from quantum_neo_dynamics.decoder import load_circuits, load_hamiltonians
 
 method = "aqc"
 approximation = "low"
-state = "300"
+state = "030"
+mode = "job" # job/batch
 
 circuits = load_circuits(circuit_type=method)
 circuit = circuits[f"{method}-{approximation}-{state}.qpy"][0]
 
 hamiltonians = load_hamiltonians()
 hamiltonian = hamiltonians[state]
-
-jobs = qpu_submit([circuit], [hamiltonian], backend_str=backend_str, shots=shots, noise_factors=noise_factors)
+commuting_groups = len(hamiltonian.group_commuting(qubit_wise=True))
+jobs = qpu_submit([circuit], [hamiltonian], backend_str=backend_str, shots=shots, noise_factors=noise_factors, mode=mode)
 
 
 # Extract the job ID
@@ -119,7 +156,10 @@ record = {
     "state": state,
     "shots": shots,
     "noise_factors": json.dumps(noise_factors),
-    "backend_str": backend_str
+    "commuting_groups": commuting_groups,
+    "experiments": commuting_groups * len(noise_factors) * shots,
+    "backend_str": backend_str,
+    "mode": mode
 }
 # create a DataFrame from the record
 df = pd.DataFrame([record])
