@@ -25,5 +25,6 @@ STATEVECTOR_RESULTS_FILE = RESULTS_DIR / "statevector_data.json"
 
 HARDWARE_EXPERIMENTS_JOBDATA = RESULTS_DIR / "hardware_experiments_jobdata.csv"
 HARDWARE_EXPERIMENTS_RESULTSFILE = RESULTS_DIR / "ZNE_hardware.csv"
+HARDWARE_EXPERIMENTS_FITDATA = RESULTS_DIR / "ZNE_hardware_fitdata.csv"
 
 MPLSTYLE_FILE = FIGURES_DIR / "proton.mplstyle"

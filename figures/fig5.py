@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 # Constants & config
+DEVICE = "ibm_pittsburgh"
 RNG_SEED = 31415
-CSV_PATH = Path("../results/noisy_aer_simulations_random_seeds_raw.csv")
+CSV_PATH = Path(f"../results/{DEVICE}_noisy_aer_simulations_random_seeds_raw.csv")
 JSON_PATH = Path("../results/statevector_data.json")
 PLOT_STYLE = "proton.mplstyle"
 FIGSIZE = (7, 3)

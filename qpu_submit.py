@@ -12,7 +12,7 @@ from qiskit_ibm_runtime import QiskitRuntimeService, Batch, EstimatorOptions, Es
 from quantum_neo_dynamics.paths import HARDWARE_EXPERIMENTS_JOBDATA
 
 
-def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag=None, shots=100_000, noise_factors=None, mode="batch"):
+def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag=None, shots=100_000, noise_factors=None, mode="batch", num_randomizations="auto"):
     provider = QiskitRuntimeService()
     backend = provider.backend(backend_str)
     props = backend.properties()
@@ -30,13 +30,6 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
     for i, isa_qc in enumerate(isa_qcs):
         assert abs(qcs[i].depth(lambda x: len(x.qubits) > 1) - isa_qc.depth(lambda x: len(x.qubits) > 1)) <= 1, "our transpilation with fixed initial layout should not make things worse."
         layout = isa_qc.layout
-        plot_circuit_layout(isa_qc, backend, view="virtual")
-        plt.savefig(f"layout_virtual_{i}.pdf")
-        plot_circuit_layout(isa_qc, backend, view="physical")
-        plt.savefig(f"layout_physical_{i}.pdf")
-        isa_qc.draw("mpl", idle_wires=False, fold=-1)
-        plt.savefig(f"isa_transpiled_{i}.pdf")
-
         isa_observables = [observable.apply_layout(layout) for observable in observables]
         obs.append(isa_observables)
 
@@ -46,7 +39,7 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
             options = EstimatorOptions(default_shots=shots, resilience_level=0)
             # PT
             options.twirling.enable_gates = True
-            options.twirling.num_randomizations = "auto"
+            options.twirling.num_randomizations = num_randomizations
             options.twirling.shots_per_randomization = "auto"
             if shots >= 100_000:
                 # otherwise we have 100_000/64 many randomizations which seems excessive
@@ -83,7 +76,7 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
         options = EstimatorOptions(default_shots=shots, resilience_level=0)
         # PT
         options.twirling.enable_gates = True
-        options.twirling.num_randomizations = "auto"
+        options.twirling.num_randomizations = num_randomizations # set to 300
         options.twirling.shots_per_randomization = "auto"
         if shots >= 100_000:
             # otherwise we have 100_000/64 many randomizations which seems excessive
@@ -115,14 +108,15 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
             jobs.append((i,job_id))
 
 
-    return jobs
+    return jobs, isa_qcs, backend
 
 
 
 
-shots = 2_000
-noise_factors = list(np.linspace(1.0 , float(7/3), 5))
+shots = 3_500
+noise_factors = list(np.linspace(1.0 , 4, 5))
 backend_str = "ibm_pittsburgh"
+num_randomizations = 300
 
 from quantum_neo_dynamics.decoder import load_circuits, load_hamiltonians
 
@@ -139,7 +133,7 @@ circuit = circuits[f"{method}-{approximation}-{state}.qpy"][0]
 hamiltonians = load_hamiltonians()
 hamiltonian = hamiltonians[state]
 commuting_groups = len(hamiltonian.group_commuting(qubit_wise=True))
-jobs = qpu_submit([circuit], [hamiltonian], backend_str=backend_str, shots=shots, noise_factors=noise_factors, mode=mode)
+jobs, isa_qcs, backend = qpu_submit([circuit], [hamiltonian], backend_str=backend_str, shots=shots, noise_factors=noise_factors, mode=mode, num_randomizations=num_randomizations)
 
 
 # Extract the job ID
@@ -147,6 +141,23 @@ if len(jobs) != 1:
     print("Warning: Expected exactly one job, but got", len(jobs))
 
 job_id = jobs[0][1]
+
+# Create figures directory and save plots
+figures_dir = f"figures/zne_hardware/{job_id}"
+os.makedirs(figures_dir, exist_ok=True)
+
+for i, isa_qc in enumerate(isa_qcs):
+    plot_circuit_layout(isa_qc, backend, view="virtual")
+    plt.savefig(f"{figures_dir}/layout_virtual_{i}.pdf")
+    plt.close()
+    
+    plot_circuit_layout(isa_qc, backend, view="physical")
+    plt.savefig(f"{figures_dir}/layout_physical_{i}.pdf")
+    plt.close()
+    
+    isa_qc.draw("mpl", idle_wires=False, fold=-1)
+    plt.savefig(f"{figures_dir}/isa_transpiled_{i}.pdf")
+    plt.close()
 
 # Create the record
 record = {
@@ -159,7 +170,8 @@ record = {
     "commuting_groups": commuting_groups,
     "experiments": commuting_groups * len(noise_factors) * shots,
     "backend_str": backend_str,
-    "mode": mode
+    "mode": mode,
+    "num_randomizations": num_randomizations
 }
 # create a DataFrame from the record
 df = pd.DataFrame([record])
@@ -168,6 +180,3 @@ if os.path.exists(HARDWARE_EXPERIMENTS_JOBDATA):
     df.to_csv(HARDWARE_EXPERIMENTS_JOBDATA, mode='a', header=False, index=False)
 else:
     df.to_csv(HARDWARE_EXPERIMENTS_JOBDATA, mode='w', header=True, index=False)
-
-
-
