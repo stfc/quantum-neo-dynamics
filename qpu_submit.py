@@ -9,11 +9,14 @@ from qiskit.quantum_info import SparsePauliOp
 from qiskit.visualization import plot_circuit_layout
 from qiskit_ibm_runtime import QiskitRuntimeService, Batch, EstimatorOptions, EstimatorV2
 
-from quantum_neo_dynamics.paths import HARDWARE_EXPERIMENTS_JOBDATA
+from quantum_neo_dynamics.paths import HARDWARE_EXPERIMENTS_JOBDATA, IBM_CREDENTIALS_FILE
 
 
-def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag=None, shots=100_000, noise_factors=None, mode="batch", num_randomizations="auto"):
-    provider = QiskitRuntimeService()
+def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag=None, shots=100_000, noise_factors=None, mode="batch", num_randomizations="auto", job_type="zne", backend_credentials=None):
+    provider = QiskitRuntimeService(channel=backend_credentials["channel"],
+                                    instance=backend_credentials["instance"]
+                                    )
+    print(f"Provider backends: {provider.backends()}")
     backend = provider.backend(backend_str)
     props = backend.properties()
     #eplg//lf or let qiskit handlke it?
@@ -49,12 +52,15 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
             options.resilience.measure_mitigation = True
 
             # ZNE
-            options.resilience.zne_mitigation = True
-            if noise_factors is None:
-                options.resilience.zne.noise_factors = list(np.linspace(1.0, 4, 10))
-            else:
-                options.resilience.zne.noise_factors = noise_factors
-            options.resilience.zne.extrapolator = ("exponential", "linear", "polynomial_degree_2")
+            if job_type == "zne":
+                options.resilience.zne_mitigation = True
+                if noise_factors is None:
+                    options.resilience.zne.noise_factors = list(np.linspace(1.0, 4, 10))
+                else:
+                    options.resilience.zne.noise_factors = noise_factors
+                options.resilience.zne.extrapolator = ("exponential", "linear", "polynomial_degree_2")
+            elif job_type == "single":
+                options.resilience.zne_mitigation = False
 
             # QOL
             # Large payload, maybe don't set
@@ -86,12 +92,15 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
         options.resilience.measure_mitigation = True
 
         # ZNE
-        options.resilience.zne_mitigation = True
-        if noise_factors is None:
-            options.resilience.zne.noise_factors = list(np.linspace(1.0, 4, 10))
-        else:
-            options.resilience.zne.noise_factors = noise_factors
-        options.resilience.zne.extrapolator = ("exponential", "linear", "polynomial_degree_2")
+        if job_type == "zne":
+            options.resilience.zne_mitigation = True
+            if noise_factors is None:
+                options.resilience.zne.noise_factors = list(np.linspace(1.0, 4, 10))
+            else:
+                options.resilience.zne.noise_factors = noise_factors
+            options.resilience.zne.extrapolator = ("exponential", "linear", "polynomial_degree_2")
+        elif job_type == "single":
+            options.resilience.zne_mitigation = False
 
         estimator = EstimatorV2(mode=backend, options=options)
 
@@ -113,7 +122,7 @@ def qpu_submit(qcs:List[QuantumCircuit], observables, backend_str="ibm_fez", tag
 
 
 
-shots = 3_500
+shots = 2000
 noise_factors = list(np.linspace(1.0 , 4, 5))
 backend_str = "ibm_pittsburgh"
 num_randomizations = 300
@@ -124,16 +133,39 @@ from quantum_neo_dynamics.decoder import load_circuits, load_hamiltonians
 
 method = "aqc"
 approximation = "low"
-state = "030"
+state = "300"
 mode = "job" # job/batch
+job_type = "zne" # single/zne
+if job_type == "single":
+    noise_factors = None
 
 circuits = load_circuits(circuit_type=method)
 circuit = circuits[f"{method}-{approximation}-{state}.qpy"][0]
 
+
+
+# debugging
+debug = False
+if debug:
+    from qiskit import QuantumCircuit
+    circuit = QuantumCircuit(18)
+    circuit.h(0)
+
 hamiltonians = load_hamiltonians()
 hamiltonian = hamiltonians[state]
 commuting_groups = len(hamiltonian.group_commuting(qubit_wise=True))
-jobs, isa_qcs, backend = qpu_submit([circuit], [hamiltonian], backend_str=backend_str, shots=shots, noise_factors=noise_factors, mode=mode, num_randomizations=num_randomizations)
+
+# load credentials
+with open(IBM_CREDENTIALS_FILE, 'r') as f:
+    credentials = json.load(f)
+
+backend_credentials = credentials.get(backend_str)
+if backend_credentials is None:
+    raise ValueError(f"No credentials found for backend: {backend_str}")
+
+jobs, isa_qcs, backend = qpu_submit([circuit], [hamiltonian], backend_str=backend_str, shots=shots, 
+                                    noise_factors=noise_factors, mode=mode, num_randomizations=num_randomizations, 
+                                    job_type=job_type, backend_credentials=backend_credentials)
 
 
 # Extract the job ID
@@ -141,10 +173,13 @@ if len(jobs) != 1:
     print("Warning: Expected exactly one job, but got", len(jobs))
 
 job_id = jobs[0][1]
+# jobid 
+print("Submitted job ID:", job_id)
 
 # Create figures directory and save plots
 figures_dir = f"figures/zne_hardware/{job_id}"
 os.makedirs(figures_dir, exist_ok=True)
+print(f"Saving figures to {figures_dir}")
 
 for i, isa_qc in enumerate(isa_qcs):
     plot_circuit_layout(isa_qc, backend, view="virtual")
@@ -166,12 +201,14 @@ record = {
     "approximation": approximation,
     "state": state,
     "shots": shots,
-    "noise_factors": json.dumps(noise_factors),
+    "num_randomizations": num_randomizations,
+    "job_type": job_type,
+    "noise_factors": json.dumps(noise_factors) if noise_factors is not None else "None",
     "commuting_groups": commuting_groups,
-    "experiments": commuting_groups * len(noise_factors) * shots,
+    "experiments": commuting_groups * len(noise_factors) * shots if noise_factors is not None else commuting_groups * shots,
     "backend_str": backend_str,
     "mode": mode,
-    "num_randomizations": num_randomizations
+    "status": "submitted"
 }
 # create a DataFrame from the record
 df = pd.DataFrame([record])
