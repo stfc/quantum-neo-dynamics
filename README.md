@@ -101,7 +101,7 @@ python qneo.py -m <method>  -a <approximation> -s <state> -b 1 -t <target> -p <p
 python save-noise-models.py -y <year> -m <month> -d <day> -H <hour> -M <minutes> -S <seconds>
 ```
 
-## [Experimental] Hardware experiments
+## Hardware experiments
 
 * To perform experiments on IBM quantum processors, run the script `qpu_submit.py` by executing
 ```
@@ -109,6 +109,27 @@ python qpu_submit.py
 ``` 
 
 * The system parameters are specified in the source code. It might be necessary to [set up an IBM Cloud account](https://quantum.cloud.ibm.com/docs/en/guides/cloud-setup).
+* Once credentials are set up, save them to `ibm_credentials.json` in the `root` directory. It should have the following structure.
+
+```
+{
+  "ibm_pittsburgh": {
+    "channel": <CHANNEL>,
+    "instance": <CRN>,
+    "token::<TOKEN>
+  },
+  "ibm_fez": {
+    "channel": <CHANNEL>,
+    "instance": <CRN>,
+    "token::<TOKEN>
+  },
+  "ibm_aachen": {
+    "channel": <CHANNEL>,
+    "instance": <CRN>,
+    "token::<TOKEN>
+  }
+}
+```
 
 ## 👥 Authors
 
