@@ -141,20 +141,25 @@ python qpu_submit.py
 
 > [!NOTE]
 > If you use this repository or its data in your work, we kindly request you to cite our paper with the following `bibtex` handle ([CITATION.bib](./CITATION.bib)):
-> ```bibtex
-> @ARTICLE{2025arXiv250708996K,  
->  author = {{Kovyrshin}, Arseny and {Manawadu}, Dilhan and {Altamura}, Edoardo and {Pennington}, George and {Jaderberg}, Benjamin and {Brandhofer}, Sebastian and {Nyk{\"a}nen}, Anton and {Miller}, Aaron and {Talarico}, Walter and {Knecht}, Stefan and {Pavo{\v{s}}evi{\'c}}, Fabijan and {Baiardi}, Alberto and {Tacchino}, Francesco and {Tavernelli}, Ivano and {Mensa}, Stefano and {Crain}, Jason and {Tornberg}, Lars and {Broo}, Anders},  
->  title = "{Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors}",  
->  journal = {arXiv e-prints},  
->  year = 2025,  
->  month = jul,  
->  eprint = {2507.08996},  
->  archivePrefix = {arXiv},  
->  primaryClass = {quant-ph},
-> adsurl = {https://ui.adsabs.harvard.edu/abs/2025arXiv250708996K},
-> adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-> }
-> ```
+```bibtex
+@ARTICLE{2026PCCP...28.3035K,
+       author = {{Kovyrshin}, Arseny and {Manawadu}, Dilhan and {Altamura}, Edoardo and {Pennington}, George and {Jaderberg}, Benjamin and {Brandhofer}, Sebastian and {Nyk{\"a}nen}, Anton and {Miller}, Aaron and {Talarico}, Walter and {Knecht}, Stefan and {Pavo{\v{s}}evi{\'c}}, Fabijan and {Baiardi}, Alberto and {Tacchino}, Francesco and {Tavernelli}, Ivano and {Mensa}, Stefano and {Crain}, Jason and {Tornberg}, Lars and {Broo}, Anders},
+        title = "{Approximate quantum circuit compilation for proton-transfer kinetics on quantum processors}",
+      journal = {Physical Chemistry Chemical Physics (Incorporating Faraday Transactions)},
+     keywords = {Quantum Physics, Chemical Physics},
+         year = 2026,
+        month = jan,
+       volume = {28},
+       number = {4},
+        pages = {3035-3054},
+          doi = {10.1039/D5CP04097C},
+archivePrefix = {arXiv},
+       eprint = {2507.08996},
+ primaryClass = {quant-ph},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2026PCCP...28.3035K},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+```
 
 ## 🕒 Version History
 
